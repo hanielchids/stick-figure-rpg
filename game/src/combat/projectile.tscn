@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b11035icliyy"]
+
+[ext_resource type="Script" path="res://src/combat/projectile.gd" id="1"]
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1")

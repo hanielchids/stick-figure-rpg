@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/combat/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "SMG"
+type = 0
+damage = 10.0
+fire_rate = 12.0
+spread_angle = 6.0
+range_distance = 600.0
+ammo_capacity = 35
+reload_time = 1.5
+projectile_speed = 0.0
+explosion_radius = 0.0
+knockback_force = 30.0
+pellet_count = 1
+automatic = true

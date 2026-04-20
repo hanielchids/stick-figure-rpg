@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/combat/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "Rocket Launcher"
+type = 1
+damage = 90.0
+fire_rate = 0.7
+spread_angle = 0.0
+range_distance = 1200.0
+ammo_capacity = 4
+reload_time = 2.8
+projectile_speed = 500.0
+explosion_radius = 120.0
+knockback_force = 300.0
+pellet_count = 1
+automatic = false

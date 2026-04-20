@@ -6,6 +6,11 @@
 [ext_resource type="Script" path="res://src/player/player_camera.gd" id="4_camera"]
 [ext_resource type="Script" path="res://src/player/player_animation.gd" id="5_anim"]
 [ext_resource type="Script" path="res://src/player/jetpack_particles.gd" id="6_jetpack"]
+[ext_resource type="Script" path="res://src/combat/weapon_manager.gd" id="7_weaponmgr"]
+[ext_resource type="Script" path="res://src/combat/health_system.gd" id="8_health"]
+[ext_resource type="Script" path="res://src/combat/combat_controller.gd" id="9_combat"]
+[ext_resource type="Script" path="res://src/combat/hitscan_resolver.gd" id="10_hitscan"]
+[ext_resource type="Script" path="res://src/combat/melee_resolver.gd" id="11_melee"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_standing"]
 size = Vector2(20, 40)
@@ -55,3 +60,18 @@ script = ExtResource("5_anim")
 [node name="JetpackParticles" type="GPUParticles2D" parent="."]
 position = Vector2(0, 0)
 script = ExtResource("6_jetpack")
+
+[node name="HealthSystem" type="Node" parent="."]
+script = ExtResource("8_health")
+
+[node name="WeaponManager" type="Node" parent="."]
+script = ExtResource("7_weaponmgr")
+
+[node name="HitscanResolver" type="Node" parent="."]
+script = ExtResource("10_hitscan")
+
+[node name="MeleeResolver" type="Node" parent="."]
+script = ExtResource("11_melee")
+
+[node name="CombatController" type="Node" parent="."]
+script = ExtResource("9_combat")

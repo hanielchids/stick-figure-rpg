@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/combat/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "Knife"
+type = 2
+damage = 50.0
+fire_rate = 2.0
+spread_angle = 0.0
+range_distance = 40.0
+ammo_capacity = -1
+reload_time = 0.0
+projectile_speed = 0.0
+explosion_radius = 0.0
+knockback_force = 100.0
+pellet_count = 1
+automatic = false

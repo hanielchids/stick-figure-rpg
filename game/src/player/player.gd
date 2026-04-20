@@ -17,14 +17,30 @@ var is_dead: bool = false
 @onready var crouching_collision: CollisionShape2D = $CrouchingCollision
 @onready var wall_raycast_right: RayCast2D = $WallRaycastRight
 @onready var wall_raycast_left: RayCast2D = $WallRaycastLeft
+@onready var health_system: HealthSystem = $HealthSystem
+@onready var weapon_manager: WeaponManager = $WeaponManager
+
+var _respawn_timer: float = 0.0
+var _spawn_position: Vector2
 
 
 func _ready() -> void:
 	crouching_collision.disabled = true
+	_spawn_position = global_position
+	health_system.owner_id = player_id
+	health_system.died.connect(_on_died)
+
+	# Give default weapon (pistol)
+	var pistol := load("res://assets/weapons/pistol.tres") as WeaponDefinition
+	if pistol:
+		weapon_manager.equip_weapon(pistol)
 
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
+		_respawn_timer -= delta
+		if _respawn_timer <= 0:
+			respawn()
 		return
 
 	var input := input_manager.current_input
@@ -226,3 +242,22 @@ func _get_wall_normal() -> Vector2:
 	elif wall_raycast_left.is_colliding():
 		return Vector2.RIGHT
 	return Vector2.ZERO
+
+
+func _on_died(_killer_id: int) -> void:
+	is_dead = true
+	_transition_to(State.DEAD)
+	velocity = Vector2.ZERO
+	_respawn_timer = Constants.RESPAWN_TIME
+	sprite.modulate = Color(1, 1, 1, 0.3)
+
+
+func respawn() -> void:
+	is_dead = false
+	global_position = _spawn_position
+	velocity = Vector2.ZERO
+	jetpack_fuel = Constants.JETPACK_FUEL_MAX
+	health_system.respawn()
+	_transition_to(State.IDLE)
+	sprite.modulate = Color(1, 1, 1, 1)
+	EventBus.player_respawned.emit(player_id, global_position)
