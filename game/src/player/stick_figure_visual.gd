@@ -25,9 +25,12 @@ func _draw() -> void:
 		is_crouching = parent_player.current_state == parent_player.State.CROUCHING
 		is_jetpacking = parent_player.current_state == parent_player.State.JETPACKING
 		if parent_player.has_node("InputManager"):
-			var im = parent_player.get_node("InputManager")
-			var aim_dir = (im.current_input.aim_position - parent_player.global_position).normalized()
-			aim_angle = aim_dir.angle()
+			var im: InputManager = parent_player.get_node("InputManager")
+			# Aim from center mass (player origin + sprite offset)
+			var center_mass: Vector2 = parent_player.global_position + Vector2(0, -20)
+			var aim_vec: Vector2 = im.current_input.aim_position - center_mass
+			if aim_vec.length_squared() > 1.0:
+				aim_angle = aim_vec.angle()
 
 	if is_crouching:
 		_draw_crouching(line_width, aim_angle)

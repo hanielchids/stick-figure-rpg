@@ -10,7 +10,7 @@ var hitscan_resolver: HitscanResolver
 var melee_resolver: MeleeResolver
 var input_manager: InputManager
 
-var _muzzle_offset: Vector2 = Vector2(12, -20)  # relative to player origin
+var _muzzle_distance: float = 15.0  # distance from center along aim direction
 
 
 func _ready() -> void:
@@ -47,16 +47,15 @@ func _process(_delta: float) -> void:
 		should_fire = input.fire_pressed
 
 	if should_fire:
-		var aim_dir := input_manager.get_aim_direction(player.global_position)
+		var aim_dir := input_manager.get_aim_direction(player.global_position + Vector2(0, -20))
 		if weapon_manager.try_fire(aim_dir):
 			_execute_fire(weapon, aim_dir)
 
 
 func _execute_fire(weapon: WeaponDefinition, aim_direction: Vector2) -> void:
-	var muzzle_pos := player.global_position + Vector2(
-		_muzzle_offset.x * (1 if player.facing_right else -1),
-		_muzzle_offset.y
-	)
+	# Muzzle follows aim direction from player center mass
+	var center_mass: Vector2 = player.global_position + Vector2(0, -20)
+	var muzzle_pos: Vector2 = center_mass + aim_direction * _muzzle_distance
 
 	match weapon.type:
 		WeaponDefinition.WeaponType.HITSCAN:

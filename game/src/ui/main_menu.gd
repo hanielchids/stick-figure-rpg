@@ -10,6 +10,8 @@ extends Control
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Input.set_custom_mouse_cursor(null)  # Reset to default OS cursor
 	play_button.pressed.connect(_on_play)
 	settings_button.pressed.connect(_on_settings)
 	quit_button.pressed.connect(_on_quit)

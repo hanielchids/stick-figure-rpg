@@ -8,7 +8,7 @@ var player: CharacterBody2D
 @onready var fuel_bar: ProgressBar = $FuelBar
 @onready var ammo_label: Label = $AmmoLabel
 @onready var weapon_label: Label = $WeaponLabel
-@onready var crosshair: TextureRect = $Crosshair
+@onready var crosshair: Control = $Crosshair
 @onready var kill_feed_container: VBoxContainer = $KillFeedContainer
 @onready var match_timer_label: Label = $MatchTimerLabel
 
@@ -89,8 +89,7 @@ func _update_ammo() -> void:
 
 
 func _update_crosshair() -> void:
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	crosshair.global_position = mouse_pos - crosshair.size / 2
+	pass  # Crosshair now handles itself via _draw()
 
 
 func _update_timer() -> void:

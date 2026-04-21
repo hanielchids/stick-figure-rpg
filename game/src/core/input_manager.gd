@@ -40,7 +40,10 @@ func _read_input() -> PlayerInput:
 	input.swap_weapon_pressed = Input.is_action_just_pressed("swap_weapon")
 	input.interact_pressed = Input.is_action_just_pressed("interact")
 	input.scoreboard_held = Input.is_action_pressed("scoreboard")
-	input.aim_position = get_viewport().get_mouse_position()
+
+	# Convert screen mouse position to world coordinates
+	var canvas: Transform2D = get_viewport().get_canvas_transform()
+	input.aim_position = canvas.affine_inverse() * get_viewport().get_mouse_position()
 
 	return input
 

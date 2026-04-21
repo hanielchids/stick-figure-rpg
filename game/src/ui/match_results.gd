@@ -22,6 +22,7 @@ func _on_match_ended(results: Dictionary) -> void:
 		return
 	_shown = true
 	panel.visible = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	# Show winner
 	var scoreboard: Array = results.get("scoreboard", [])
