@@ -12,6 +12,10 @@
 [ext_resource type="Resource" path="res://assets/weapons/knife.tres" id="10_knife"]
 [ext_resource type="Script" uid="uid://dh2xv0m0pi2o0" path="res://src/combat/kill_feed.gd" id="11_killfeed"]
 [ext_resource type="Script" path="res://src/core/match_manager.gd" id="12_matchmgr"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://src/ui/hud.tscn" id="13_hud"]
+[ext_resource type="PackedScene" uid="uid://cu2a020aikiyy" path="res://src/ui/scoreboard.tscn" id="14_scoreboard"]
+[ext_resource type="PackedScene" uid="uid://qbxbxc812gjo" path="res://src/ui/match_results.tscn" id="15_results"]
+[ext_resource type="Script" path="res://src/ui/crosshair.gd" id="16_crosshair"]
 
 [node name="MapArena" type="Node2D" unique_id=197030131]
 script = ExtResource("1_map")
@@ -88,3 +92,12 @@ position = Vector2(1100, 400)
 [node name="MatchManager" type="Node" parent="."]
 script = ExtResource("12_matchmgr")
 bot_count = 3
+
+[node name="HUD" parent="." instance=ExtResource("13_hud")]
+
+[node name="Crosshair" parent="HUD" index="7"]
+script = ExtResource("16_crosshair")
+
+[node name="Scoreboard" parent="." instance=ExtResource("14_scoreboard")]
+
+[node name="MatchResults" parent="." instance=ExtResource("15_results")]

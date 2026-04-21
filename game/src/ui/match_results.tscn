@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://qbxbxc812gjo"]
+
+[ext_resource type="Script" path="res://src/ui/match_results.gd" id="1_results"]
+
+[node name="MatchResults" type="CanvasLayer"]
+layer = 3
+script = ExtResource("1_results")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="WinnerLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "MATCH OVER"
+horizontal_alignment = 1
+
+[node name="Sep" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Scores" type="VBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="PlayAgain" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+text = "Play Again"
+
+[node name="MainMenu" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+text = "Main Menu"

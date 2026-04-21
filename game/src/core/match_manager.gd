@@ -28,6 +28,8 @@ func _ready() -> void:
 		GameState.add_player(human_player.player_id, "Player")
 		GameState.local_player_id = human_player.player_id
 
+	# Wait one frame so the scene tree is fully ready before adding bots
+	await get_tree().process_frame
 	_start_match()
 
 
@@ -81,11 +83,6 @@ func _spawn_bot(id: int, bot_name: String) -> void:
 			var character: CharacterBody2D = node as CharacterBody2D
 			enemy_positions.append(character.global_position)
 
-	if spawn_manager:
-		bot.global_position = spawn_manager.get_spawn_point(enemy_positions)
-	else:
-		bot.global_position = Vector2(200 + id * 300, 400)
-
 	bot.add_to_group("players")
 
 	# Disable human input processing — bot controller writes input directly
@@ -93,10 +90,17 @@ func _spawn_bot(id: int, bot_name: String) -> void:
 	if input_mgr:
 		input_mgr.set_process(false)
 
+	# Add to tree first, THEN set position (global_position needs scene tree)
 	get_parent().add_child(bot)
+
+	if spawn_manager:
+		bot.global_position = spawn_manager.get_spawn_point(enemy_positions)
+	else:
+		bot.global_position = Vector2(200 + id * 300, 820)
+
 	_bots.append(bot)
 	GameState.add_player(id, bot_name)
-	print("Spawned bot '%s' (id=%d) at %s" % [bot_name, id, str(bot.global_position)])
+	print("[MatchManager] Spawned %s at %s" % [bot_name, str(bot.global_position)])
 
 
 func _end_match() -> void:

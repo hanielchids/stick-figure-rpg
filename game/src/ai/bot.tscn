@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://bot001"]
 
-[ext_resource type="Script" path="res://src/player/player.gd" id="1_player"]
-[ext_resource type="Script" path="res://src/core/input_manager.gd" id="2_input"]
-[ext_resource type="Script" path="res://src/player/stick_figure_visual.gd" id="3_stickfig"]
-[ext_resource type="Script" path="res://src/player/jetpack_particles.gd" id="4_jetpack"]
-[ext_resource type="Script" path="res://src/combat/weapon_manager.gd" id="5_weaponmgr"]
-[ext_resource type="Script" path="res://src/combat/health_system.gd" id="6_health"]
-[ext_resource type="Script" path="res://src/combat/combat_controller.gd" id="7_combat"]
-[ext_resource type="Script" path="res://src/combat/hitscan_resolver.gd" id="8_hitscan"]
-[ext_resource type="Script" path="res://src/combat/melee_resolver.gd" id="9_melee"]
-[ext_resource type="Script" path="res://src/ai/bot_controller.gd" id="10_botai"]
+[ext_resource type="Script" uid="uid://cf7opgfna5k8u" path="res://src/player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://3jhyh2sjunui" path="res://src/core/input_manager.gd" id="2_input"]
+[ext_resource type="Script" uid="uid://dc2gfdhucncr7" path="res://src/player/stick_figure_visual.gd" id="3_stickfig"]
+[ext_resource type="Script" uid="uid://bqnvgtk3arvba" path="res://src/player/jetpack_particles.gd" id="4_jetpack"]
+[ext_resource type="Script" uid="uid://b3e6fjhwnsuxj" path="res://src/combat/weapon_manager.gd" id="5_weaponmgr"]
+[ext_resource type="Script" uid="uid://clycg2aygpcmf" path="res://src/combat/health_system.gd" id="6_health"]
+[ext_resource type="Script" uid="uid://bykelmwh1kk1d" path="res://src/combat/combat_controller.gd" id="7_combat"]
+[ext_resource type="Script" uid="uid://dqomrrs1rutpm" path="res://src/combat/hitscan_resolver.gd" id="8_hitscan"]
+[ext_resource type="Script" uid="uid://bd72ffcdttlgq" path="res://src/combat/melee_resolver.gd" id="9_melee"]
+[ext_resource type="Script" uid="uid://barp4s5dfsftg" path="res://src/ai/bot_controller.gd" id="10_botai"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_standing"]
 size = Vector2(20, 40)
@@ -17,56 +17,52 @@ size = Vector2(20, 40)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_crouching"]
 size = Vector2(20, 24)
 
-[node name="Bot" type="CharacterBody2D"]
+[node name="Bot" type="CharacterBody2D" unique_id=1338303920]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_player")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=252811826]
 position = Vector2(0, -20)
 script = ExtResource("3_stickfig")
-body_color = Color(1.0, 0.4, 0.4, 1.0)
+body_color = Color(1, 0.4, 0.4, 1)
 
-[node name="StandingCollision" type="CollisionShape2D" parent="."]
+[node name="StandingCollision" type="CollisionShape2D" parent="." unique_id=738034689]
 position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_standing")
 
-[node name="CrouchingCollision" type="CollisionShape2D" parent="."]
+[node name="CrouchingCollision" type="CollisionShape2D" parent="." unique_id=1095185698]
 position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_crouching")
 disabled = true
 
-[node name="WallRaycastRight" type="RayCast2D" parent="."]
+[node name="WallRaycastRight" type="RayCast2D" parent="." unique_id=1197101047]
 position = Vector2(0, -20)
 target_position = Vector2(15, 0)
-collision_mask = 1
 
-[node name="WallRaycastLeft" type="RayCast2D" parent="."]
+[node name="WallRaycastLeft" type="RayCast2D" parent="." unique_id=152110570]
 position = Vector2(0, -20)
 target_position = Vector2(-15, 0)
-collision_mask = 1
 
-[node name="InputManager" type="Node" parent="."]
+[node name="InputManager" type="Node" parent="." unique_id=206576074]
 script = ExtResource("2_input")
 
-[node name="JetpackParticles" type="GPUParticles2D" parent="."]
-position = Vector2(0, 0)
+[node name="JetpackParticles" type="GPUParticles2D" parent="." unique_id=54947367]
 script = ExtResource("4_jetpack")
 
-[node name="HealthSystem" type="Node" parent="."]
+[node name="HealthSystem" type="Node" parent="." unique_id=1390153902]
 script = ExtResource("6_health")
 
-[node name="WeaponManager" type="Node" parent="."]
+[node name="WeaponManager" type="Node" parent="." unique_id=1610252889]
 script = ExtResource("5_weaponmgr")
 
-[node name="HitscanResolver" type="Node" parent="."]
+[node name="HitscanResolver" type="Node" parent="." unique_id=467940811]
 script = ExtResource("8_hitscan")
 
-[node name="MeleeResolver" type="Node" parent="."]
+[node name="MeleeResolver" type="Node" parent="." unique_id=1011953041]
 script = ExtResource("9_melee")
 
-[node name="CombatController" type="Node" parent="."]
+[node name="CombatController" type="Node" parent="." unique_id=135654738]
 script = ExtResource("7_combat")
 
-[node name="BotController" type="Node" parent="."]
+[node name="BotController" type="Node" parent="." unique_id=1650167809]
 script = ExtResource("10_botai")
