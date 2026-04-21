@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://c22daap3nej7h"]
+
+[ext_resource type="Script" uid="uid://dby5i3chut24h" path="res://src/maps/map_arena.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://d4nab8urhnooj" path="res://src/maps/spawn_point_manager.gd" id="2_spawns"]
+[ext_resource type="PackedScene" uid="uid://player001" path="res://src/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://b43oj3y7v3eai" path="res://src/combat/weapon_pickup.tscn" id="4_wpickup"]
+[ext_resource type="PackedScene" uid="uid://d0pifeci1fjgq" path="res://src/combat/health_pickup.tscn" id="5_hpickup"]
+[ext_resource type="Resource" path="res://assets/weapons/shotgun.tres" id="6_shotgun"]
+[ext_resource type="Resource" path="res://assets/weapons/smg.tres" id="7_smg"]
+[ext_resource type="Resource" path="res://assets/weapons/sniper.tres" id="8_sniper"]
+[ext_resource type="Resource" path="res://assets/weapons/rocket_launcher.tres" id="9_rocket"]
+[ext_resource type="Resource" path="res://assets/weapons/knife.tres" id="10_knife"]
+[ext_resource type="Script" uid="uid://dh2xv0m0pi2o0" path="res://src/combat/kill_feed.gd" id="11_killfeed"]
+
+[node name="MapArena" type="Node2D" unique_id=197030131]
+script = ExtResource("1_map")
+
+[node name="SpawnPointManager" type="Node" parent="." unique_id=463297827]
+script = ExtResource("2_spawns")
+
+[node name="KillFeed" type="Node" parent="." unique_id=1498481243]
+script = ExtResource("11_killfeed")
+
+[node name="Player" parent="." unique_id=2072703725 instance=ExtResource("3_player")]
+position = Vector2(800, 820)
+
+[node name="PlayerSpawn0" type="Marker2D" parent="." unique_id=159773240]
+position = Vector2(150, 850)
+
+[node name="PlayerSpawn1" type="Marker2D" parent="." unique_id=188362528]
+position = Vector2(1450, 850)
+
+[node name="PlayerSpawn2" type="Marker2D" parent="." unique_id=672566764]
+position = Vector2(250, 600)
+
+[node name="PlayerSpawn3" type="Marker2D" parent="." unique_id=85709269]
+position = Vector2(1350, 600)
+
+[node name="PlayerSpawn4" type="Marker2D" parent="." unique_id=1051294168]
+position = Vector2(500, 400)
+
+[node name="PlayerSpawn5" type="Marker2D" parent="." unique_id=890817911]
+position = Vector2(1100, 400)
+
+[node name="PlayerSpawn6" type="Marker2D" parent="." unique_id=1762398701]
+position = Vector2(800, 570)
+
+[node name="PlayerSpawn7" type="Marker2D" parent="." unique_id=591655367]
+position = Vector2(800, 250)
+
+[node name="ShotgunPickup" parent="." unique_id=1717206843 instance=ExtResource("4_wpickup")]
+position = Vector2(250, 600)
+weapon_resource = ExtResource("6_shotgun")
+
+[node name="SMGPickup" parent="." unique_id=873907215 instance=ExtResource("4_wpickup")]
+position = Vector2(1350, 600)
+weapon_resource = ExtResource("7_smg")
+
+[node name="SniperPickup" parent="." unique_id=466115240 instance=ExtResource("4_wpickup")]
+position = Vector2(800, 250)
+weapon_resource = ExtResource("8_sniper")
+
+[node name="RocketPickup" parent="." unique_id=832690822 instance=ExtResource("4_wpickup")]
+position = Vector2(800, 570)
+weapon_resource = ExtResource("9_rocket")
+
+[node name="KnifePickup1" parent="." unique_id=2056350015 instance=ExtResource("4_wpickup")]
+position = Vector2(600, 850)
+weapon_resource = ExtResource("10_knife")
+
+[node name="KnifePickup2" parent="." unique_id=1916659406 instance=ExtResource("4_wpickup")]
+position = Vector2(1000, 850)
+weapon_resource = ExtResource("10_knife")
+
+[node name="HealthPickup1" parent="." unique_id=483586960 instance=ExtResource("5_hpickup")]
+position = Vector2(150, 850)
+
+[node name="HealthPickup2" parent="." unique_id=781116992 instance=ExtResource("5_hpickup")]
+position = Vector2(1450, 850)
+
+[node name="HealthPickup3" parent="." unique_id=1315240295 instance=ExtResource("5_hpickup")]
+position = Vector2(500, 400)
+
+[node name="HealthPickup4" parent="." unique_id=1025002156 instance=ExtResource("5_hpickup")]
+position = Vector2(1100, 400)

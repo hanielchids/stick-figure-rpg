@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="StickWars"
 config/description="Fast-paced 2D multiplayer shooter with jetpack movement"
-run/main_scene="res://src/player/test_level.tscn"
+run/main_scene="res://src/maps/map_arena.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
