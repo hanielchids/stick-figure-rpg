@@ -17,6 +17,9 @@ gem "rack-cors"
 # Redis for leaderboards and caching
 gem "redis"
 
+# Observability
+gem "lograge"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

@@ -11,6 +11,11 @@ var player: CharacterBody2D
 @onready var crosshair: Control = $Crosshair
 @onready var kill_feed_container: VBoxContainer = $KillFeedContainer
 @onready var match_timer_label: Label = $MatchTimerLabel
+@onready var xp_bar: ProgressBar = $XPBar
+@onready var level_label: Label = $LevelLabel
+@onready var notification_label: Label = $NotificationLabel
+
+var _notification_timer: float = 0.0
 
 
 func _ready() -> void:
@@ -18,10 +23,15 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_find_player()
 
+	notification_label.text = ""
+	Progression.xp_gained.connect(_on_xp_gained)
+	Progression.level_up.connect(_on_level_up)
+	Progression.cosmetic_unlocked.connect(_on_cosmetic_unlocked)
+
 	EventBus.kill_feed_entry.connect(_on_kill_feed_entry)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not player or not is_instance_valid(player):
 		_find_player()
 		return
@@ -31,6 +41,8 @@ func _process(_delta: float) -> void:
 	_update_ammo()
 	_update_crosshair()
 	_update_timer()
+	_update_xp()
+	_update_notification(delta)
 
 
 func _find_player() -> void:
@@ -135,3 +147,35 @@ func _on_kill_feed_entry(killer_name: String, victim_name: String, weapon_name: 
 	# Limit to 5 entries
 	while kill_feed_container.get_child_count() > 5:
 		kill_feed_container.get_child(0).queue_free()
+
+
+func _update_xp() -> void:
+	xp_bar.value = Progression.xp_progress() * 100.0
+	level_label.text = "LV %d" % Progression.current_level
+
+
+func _update_notification(delta: float) -> void:
+	if _notification_timer > 0:
+		_notification_timer -= delta
+		if _notification_timer <= 0:
+			notification_label.text = ""
+
+
+func _show_notification(text: String, duration: float = 3.0) -> void:
+	notification_label.text = text
+	_notification_timer = duration
+
+
+func _on_xp_gained(amount: int, _total: int) -> void:
+	_show_notification("+%d XP" % amount, 1.5)
+
+
+func _on_level_up(new_level: int) -> void:
+	_show_notification("LEVEL UP! LV %d" % new_level, 3.0)
+	SoundManager.play_sfx("pickup", 3.0)  # level up sound
+
+
+func _on_cosmetic_unlocked(cosmetic_id: String) -> void:
+	if Progression.skin_catalog.has(cosmetic_id):
+		var skin_name: String = Progression.skin_catalog[cosmetic_id]["name"]
+		_show_notification("UNLOCKED: %s skin!" % skin_name, 3.0)

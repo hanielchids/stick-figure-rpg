@@ -26,11 +26,8 @@ func _ready() -> void:
 	var timer := get_tree().create_timer(lifetime)
 	timer.timeout.connect(_explode)
 
-	# Visual
-	var visual := ColorRect.new()
-	visual.size = Vector2(8, 4)
-	visual.position = Vector2(-4, -2)
-	visual.color = Color(1.0, 0.4, 0.1)
+	# Visual — drawn rocket shape
+	var visual := _RocketVisual.new()
 	add_child(visual)
 
 	# Trail particles
@@ -125,3 +122,23 @@ func _spawn_explosion_visual() -> void:
 	get_tree().current_scene.add_child(explosion)
 	var timer := get_tree().create_timer(0.6)
 	timer.timeout.connect(explosion.queue_free)
+
+
+class _RocketVisual extends Node2D:
+	func _ready() -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		# Rocket body
+		draw_line(Vector2(-6, 0), Vector2(6, 0), Color(0.5, 0.55, 0.5), 4.0)
+		# Nose cone (red tip)
+		draw_line(Vector2(6, 0), Vector2(9, 0), Color(0.9, 0.2, 0.1), 3.0)
+		# Fins
+		draw_line(Vector2(-6, 0), Vector2(-8, -3), Color(0.5, 0.5, 0.5), 1.5)
+		draw_line(Vector2(-6, 0), Vector2(-8, 3), Color(0.5, 0.5, 0.5), 1.5)
+		# Exhaust glow
+		var flicker: float = sin(Time.get_ticks_msec() * 0.02) * 1.5
+		draw_circle(Vector2(-7, 0), 2.0 + flicker, Color(1.0, 0.6, 0.1, 0.6))
+
+	func _process(_delta: float) -> void:
+		queue_redraw()

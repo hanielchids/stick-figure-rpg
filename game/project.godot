@@ -28,6 +28,7 @@ Constants="*res://src/core/constants.gd"
 SoundManager="*res://src/core/sound_manager.gd"
 NetworkManager="*res://src/networking/network_manager.gd"
 ApiClient="*res://src/networking/api_client.gd"
+Progression="*res://src/core/progression.gd"
 
 [display]
 

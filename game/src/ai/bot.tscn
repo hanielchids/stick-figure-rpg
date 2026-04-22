@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://dqomrrs1rutpm" path="res://src/combat/hitscan_resolver.gd" id="8_hitscan"]
 [ext_resource type="Script" uid="uid://bd72ffcdttlgq" path="res://src/combat/melee_resolver.gd" id="9_melee"]
 [ext_resource type="Script" uid="uid://barp4s5dfsftg" path="res://src/ai/bot_controller.gd" id="10_botai"]
+[ext_resource type="Script" path="res://src/player/sprite_character.gd" id="11_spritechar"]
+[ext_resource type="Script" path="res://src/combat/weapon_visual.gd" id="12_weaponvis"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_standing"]
 size = Vector2(20, 40)
@@ -26,6 +28,10 @@ position = Vector2(0, -20)
 script = ExtResource("3_stickfig")
 body_color = Color(1.0, 0.4, 0.4, 1.0)
 accent_color = Color(1.0, 0.2, 0.2, 1.0)
+visible = false
+
+[node name="SpriteCharacter" type="AnimatedSprite2D" parent="."]
+script = ExtResource("11_spritechar")
 
 [node name="StandingCollision" type="CollisionShape2D" parent="." unique_id=738034689]
 position = Vector2(0, -20)
@@ -64,6 +70,9 @@ script = ExtResource("9_melee")
 
 [node name="CombatController" type="Node" parent="." unique_id=135654738]
 script = ExtResource("7_combat")
+
+[node name="WeaponVisual" type="Node2D" parent="."]
+script = ExtResource("12_weaponvis")
 
 [node name="BotController" type="Node" parent="." unique_id=1650167809]
 script = ExtResource("10_botai")

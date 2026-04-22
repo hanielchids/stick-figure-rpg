@@ -136,14 +136,12 @@ func _spawn_network_player(peer_id: int, player_name: String) -> void:
 		GameState.local_player_id = peer_id
 
 
-var _bot_colors: Array[Array] = [
-	[Color(1.0, 0.4, 0.4), Color(1.0, 0.2, 0.2)],  # red
-	[Color(0.4, 0.8, 1.0), Color(0.2, 0.5, 1.0)],  # blue
-	[Color(0.4, 1.0, 0.5), Color(0.2, 0.8, 0.3)],  # green
-	[Color(1.0, 0.8, 0.3), Color(1.0, 0.6, 0.1)],  # yellow
-	[Color(0.8, 0.4, 1.0), Color(0.6, 0.2, 1.0)],  # purple
-	[Color(1.0, 0.6, 0.3), Color(1.0, 0.4, 0.1)],  # orange
-	[Color(0.6, 0.9, 0.9), Color(0.3, 0.7, 0.7)],  # teal
+var _bot_spritesheets: Array[String] = [
+	"res://assets/sprites/soldier_tilesheet.png",
+	"res://assets/sprites/zombie_tilesheet.png",
+	"res://assets/sprites/adventurer_tilesheet.png",
+	"res://assets/sprites/female_tilesheet.png",
+	"res://assets/sprites/player_tilesheet.png",
 ]
 
 
@@ -153,12 +151,11 @@ func _spawn_bot(bot_id: int, bot_name: String) -> void:
 	bot.name = "Bot_%d" % bot_id
 	bot.add_to_group("players")
 
-	# Assign unique color to each bot
-	var color_idx: int = _bots.size() % _bot_colors.size()
-	var sprite: Node = bot.get_node_or_null("Sprite2D")
-	if sprite:
-		sprite.set("body_color", _bot_colors[color_idx][0])
-		sprite.set("accent_color", _bot_colors[color_idx][1])
+	# Assign unique sprite sheet to each bot
+	var sheet_idx: int = _bots.size() % _bot_spritesheets.size()
+	var sprite_char: Node = bot.get_node_or_null("SpriteCharacter")
+	if sprite_char and sprite_char.has_method("setup_with_tilesheet"):
+		sprite_char.setup_with_tilesheet(_bot_spritesheets[sheet_idx])
 
 	var input_mgr: Node = bot.get_node_or_null("InputManager")
 	if input_mgr:
