@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://dbunker3map01"]
+
+[ext_resource type="Script" uid="uid://c9bunker1map3" path="res://src/maps/map_bunker.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://d4nab8urhnooj" path="res://src/maps/spawn_point_manager.gd" id="2_spawns"]
+[ext_resource type="PackedScene" uid="uid://player001" path="res://src/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://b43oj3y7v3eai" path="res://src/combat/weapon_pickup.tscn" id="4_wpickup"]
+[ext_resource type="PackedScene" uid="uid://d0pifeci1fjgq" path="res://src/combat/health_pickup.tscn" id="5_hpickup"]
+[ext_resource type="Resource" path="res://assets/weapons/shotgun.tres" id="6_shotgun"]
+[ext_resource type="Resource" path="res://assets/weapons/smg.tres" id="7_smg"]
+[ext_resource type="Resource" path="res://assets/weapons/rocket_launcher.tres" id="9_rocket"]
+[ext_resource type="Resource" path="res://assets/weapons/knife.tres" id="10_knife"]
+[ext_resource type="Script" uid="uid://dh2xv0m0pi2o0" path="res://src/combat/kill_feed.gd" id="11_killfeed"]
+[ext_resource type="Script" uid="uid://5q3pvwdrlgto" path="res://src/core/match_manager.gd" id="12_matchmgr"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://src/ui/hud.tscn" id="13_hud"]
+[ext_resource type="PackedScene" uid="uid://cu2a020aikiyy" path="res://src/ui/scoreboard.tscn" id="14_scoreboard"]
+[ext_resource type="PackedScene" uid="uid://qbxbxc812gjo" path="res://src/ui/match_results.tscn" id="15_results"]
+
+[node name="MapBunker" type="Node2D"]
+script = ExtResource("1_map")
+
+[node name="SpawnPointManager" type="Node" parent="."]
+script = ExtResource("2_spawns")
+
+[node name="KillFeed" type="Node" parent="."]
+script = ExtResource("11_killfeed")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(700, 750)
+
+[node name="PlayerSpawn0" type="Marker2D" parent="."]
+position = Vector2(100, 750)
+
+[node name="PlayerSpawn1" type="Marker2D" parent="."]
+position = Vector2(1300, 750)
+
+[node name="PlayerSpawn2" type="Marker2D" parent="."]
+position = Vector2(700, 750)
+
+[node name="PlayerSpawn3" type="Marker2D" parent="."]
+position = Vector2(200, 750)
+
+[node name="PlayerSpawn4" type="Marker2D" parent="."]
+position = Vector2(1200, 750)
+
+[node name="PlayerSpawn5" type="Marker2D" parent="."]
+position = Vector2(600, 750)
+
+[node name="PlayerSpawn6" type="Marker2D" parent="."]
+position = Vector2(800, 750)
+
+[node name="PlayerSpawn7" type="Marker2D" parent="."]
+position = Vector2(350, 750)
+
+[node name="ShotgunPickup1" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(200, 680)
+weapon_resource = ExtResource("6_shotgun")
+
+[node name="ShotgunPickup2" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(1200, 680)
+weapon_resource = ExtResource("6_shotgun")
+
+[node name="SMGPickup1" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(200, 370)
+weapon_resource = ExtResource("7_smg")
+
+[node name="SMGPickup2" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(1200, 370)
+weapon_resource = ExtResource("7_smg")
+
+[node name="KnifePickup1" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(300, 730)
+weapon_resource = ExtResource("10_knife")
+
+[node name="KnifePickup2" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(1100, 730)
+weapon_resource = ExtResource("10_knife")
+
+[node name="RocketPickup" parent="." instance=ExtResource("4_wpickup")]
+position = Vector2(700, 270)
+weapon_resource = ExtResource("9_rocket")
+
+[node name="HealthPickup1" parent="." instance=ExtResource("5_hpickup")]
+position = Vector2(100, 750)
+
+[node name="HealthPickup2" parent="." instance=ExtResource("5_hpickup")]
+position = Vector2(1300, 750)
+
+[node name="HealthPickup3" parent="." instance=ExtResource("5_hpickup")]
+position = Vector2(700, 680)
+
+[node name="HealthPickup4" parent="." instance=ExtResource("5_hpickup")]
+position = Vector2(700, 270)
+
+[node name="MatchManager" type="Node" parent="."]
+script = ExtResource("12_matchmgr")
+
+[node name="HUD" parent="." instance=ExtResource("13_hud")]
+
+[node name="Scoreboard" parent="." instance=ExtResource("14_scoreboard")]
+
+[node name="MatchResults" parent="." instance=ExtResource("15_results")]

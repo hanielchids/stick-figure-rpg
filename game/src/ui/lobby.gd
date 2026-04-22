@@ -11,8 +11,14 @@ extends Control
 @onready var player_list: VBoxContainer = $Panel/VBox/PlayerList
 @onready var start_button: Button = $Panel/VBox/StartButton
 @onready var bot_count_input: SpinBox = $Panel/VBox/BotConfig/BotCount
+@onready var map_option: OptionButton = $Panel/VBox/MapConfig/MapOption
 
 var _in_lobby: bool = false
+var _maps: Array[String] = [
+	"res://src/maps/map_arena.tscn",
+	"res://src/maps/map_towers.tscn",
+	"res://src/maps/map_bunker.tscn",
+]
 
 
 func _ready() -> void:
@@ -23,6 +29,11 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back)
 	start_button.pressed.connect(_on_start)
 	start_button.visible = false
+
+	map_option.add_item("Arena", 0)
+	map_option.add_item("Towers", 1)
+	map_option.add_item("Bunker", 2)
+	map_option.selected = 0
 
 	NetworkManager.player_connected.connect(_on_player_joined)
 	NetworkManager.player_disconnected.connect(_on_player_left)
@@ -58,7 +69,8 @@ func _on_join() -> void:
 
 func _on_offline() -> void:
 	NetworkManager.disconnect_game()
-	get_tree().change_scene_to_file("res://src/maps/map_arena.tscn")
+	var selected_map: String = _maps[map_option.selected]
+	get_tree().change_scene_to_file(selected_map)
 
 
 func _on_back() -> void:
@@ -75,7 +87,8 @@ func _on_start() -> void:
 
 @rpc("authority", "reliable", "call_local")
 func _load_game() -> void:
-	get_tree().change_scene_to_file("res://src/maps/map_arena.tscn")
+	var selected_map: String = _maps[map_option.selected]
+	get_tree().change_scene_to_file(selected_map)
 
 
 func _on_connected() -> void:
