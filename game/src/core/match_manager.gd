@@ -182,3 +182,39 @@ func _end_match() -> void:
 	GameState.current_state = GameState.MatchState.ENDED
 	var results: Array = GameState.get_scoreboard()
 	EventBus.match_ended.emit({"scoreboard": results, "duration": match_timer})
+	_submit_results_to_backend(results)
+
+
+func _submit_results_to_backend(scoreboard: Array) -> void:
+	if not ApiClient.is_logged_in:
+		return
+
+	var players_data: Array = []
+	for i in scoreboard.size():
+		var entry: Dictionary = scoreboard[i]
+		var player_data: Dictionary = {
+			"kills": entry["kills"],
+			"deaths": entry["deaths"],
+			"placement": i + 1,
+			"xp_earned": entry["kills"] * 10 + (10 if i == 0 else 0),
+		}
+		# Only include user_id for real logged-in players
+		if entry["id"] == GameState.local_player_id and ApiClient.current_user.has("id"):
+			player_data["user_id"] = ApiClient.current_user["id"]
+		else:
+			player_data["bot_name"] = entry["name"]
+		players_data.append(player_data)
+
+	var match_data: Dictionary = {
+		"map": "Arena",
+		"mode": "Deathmatch",
+		"duration_sec": int(match_timer),
+		"players": players_data,
+	}
+
+	ApiClient.submit_match_results(match_data, func(response: Dictionary) -> void:
+		if response.get("ok", false):
+			print("[MatchManager] Results submitted to backend")
+		else:
+			print("[MatchManager] Failed to submit results: %s" % str(response.get("error", "")))
+	)
