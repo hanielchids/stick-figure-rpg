@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://uthscreen001"]
+
+[ext_resource type="Script" path="res://src/ui/auth_screen.gd" id="1_auth"]
+
+[node name="AuthScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_auth")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.09, 0.12, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 80.0
+offset_right = 150.0
+offset_bottom = 140.0
+grow_horizontal = 2
+text = "STICKWARS"
+horizontal_alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -120.0
+offset_right = 160.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="UsernameInput" type="LineEdit" parent="Panel/VBox"]
+layout_mode = 2
+placeholder_text = "Username"
+visible = false
+
+[node name="EmailInput" type="LineEdit" parent="Panel/VBox"]
+layout_mode = 2
+placeholder_text = "Email"
+
+[node name="PasswordInput" type="LineEdit" parent="Panel/VBox"]
+layout_mode = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Spacer" type="Control" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="LoginButton" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+text = "LOGIN"
+
+[node name="SignupButton" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+text = "SIGN UP"
+
+[node name="Spacer2" type="Control" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 5)
+
+[node name="SkipButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "PLAY WITHOUT ACCOUNT"
+
+[node name="StatusLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
