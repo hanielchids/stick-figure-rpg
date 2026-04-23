@@ -1,21 +1,9 @@
 ## Map 1: Arena — Multi-level combat arena.
-## Clean ColorRect visuals matching the stick-figure aesthetic.
-## Includes collision, kill zone, spawns, and navigation mesh.
+## Collision via StaticBody2D, visuals via Kenney Pixel Platformer tiles.
 extends Node2D
 
 const MAP_W: float = 1600.0
 const MAP_H: float = 900.0
-
-# Colors — dark industrial theme
-const C_BG := Color(0.10, 0.11, 0.15)
-const C_FLOOR := Color(0.28, 0.32, 0.38)
-const C_WALL := Color(0.24, 0.28, 0.34)
-const C_CEIL := Color(0.22, 0.25, 0.30)
-const C_PLAT1 := Color(0.34, 0.38, 0.44)
-const C_PLAT2 := Color(0.32, 0.36, 0.42)
-const C_PLAT3 := Color(0.30, 0.34, 0.40)
-const C_PLAT4 := Color(0.28, 0.32, 0.38)
-const C_PILLAR := Color(0.26, 0.30, 0.36)
 
 var _platform_data: Array = []
 
@@ -27,68 +15,79 @@ func _ready() -> void:
 	_build_kill_zone()
 	_build_spawn_points()
 	_build_navigation()
+	_build_decorations()
 
 
 func _build_background() -> void:
 	var bg := ColorRect.new()
 	bg.size = Vector2(MAP_W, MAP_H)
-	bg.color = C_BG
+	bg.color = Color(0.12, 0.15, 0.22)
 	bg.z_index = -10
 	add_child(bg)
 
 
 func _build_walls() -> void:
-	_add_rect(Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32), C_FLOOR)     # floor
-	_add_rect(Vector2(16, MAP_H / 2), Vector2(32, MAP_H), C_WALL)               # left wall
-	_add_rect(Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H), C_WALL)       # right wall
-	_add_rect(Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32), C_CEIL)               # ceiling
+	# Floor
+	_add_collider(Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32))
+	TileDecorator.decorate_ground(self, Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32), "grass")
+
+	# Left wall
+	_add_collider(Vector2(16, MAP_H / 2), Vector2(32, MAP_H))
+	TileDecorator.decorate_wall(self, Vector2(16, MAP_H / 2), Vector2(32, MAP_H))
+
+	# Right wall
+	_add_collider(Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H))
+	TileDecorator.decorate_wall(self, Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H))
+
+	# Ceiling
+	_add_collider(Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32))
+	TileDecorator.decorate_ground(self, Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32), "stone")
 
 
 func _build_platforms() -> void:
 	# Ground level small platforms
-	_add_platform(Vector2(400, 788), Vector2(120, 16), C_PLAT1)
-	_add_platform(Vector2(1200, 788), Vector2(120, 16), C_PLAT1)
+	_add_platform(Vector2(400, 788), Vector2(120, 16))
+	_add_platform(Vector2(1200, 788), Vector2(120, 16))
 
 	# Mid-level platforms
-	_add_platform(Vector2(250, 618), Vector2(180, 16), C_PLAT2)
-	_add_platform(Vector2(800, 588), Vector2(200, 16), C_PLAT2)
-	_add_platform(Vector2(1350, 618), Vector2(180, 16), C_PLAT2)
+	_add_platform(Vector2(250, 618), Vector2(180, 16))
+	_add_platform(Vector2(800, 588), Vector2(200, 16))
+	_add_platform(Vector2(1350, 618), Vector2(180, 16))
 
 	# High platforms
-	_add_platform(Vector2(500, 418), Vector2(160, 16), C_PLAT3)
-	_add_platform(Vector2(1100, 418), Vector2(160, 16), C_PLAT3)
+	_add_platform(Vector2(500, 418), Vector2(160, 16))
+	_add_platform(Vector2(1100, 418), Vector2(160, 16))
 
 	# Top center platform
-	_add_platform(Vector2(800, 268), Vector2(140, 16), C_PLAT4)
+	_add_platform(Vector2(800, 268), Vector2(140, 16))
 
 	# Cover pillars
-	_add_platform(Vector2(600, 728), Vector2(16, 100), C_PILLAR)
-	_add_platform(Vector2(1000, 728), Vector2(16, 100), C_PILLAR)
+	_add_pillar(Vector2(600, 728), Vector2(16, 100))
+	_add_pillar(Vector2(1000, 728), Vector2(16, 100))
 
 
-func _add_rect(pos: Vector2, size: Vector2, color: Color) -> void:
+func _add_collider(pos: Vector2, size: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.position = pos
 	body.collision_layer = Constants.LAYER_WORLD
-
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = size
 	shape.shape = rect
 	body.add_child(shape)
-
-	var visual := ColorRect.new()
-	visual.size = size
-	visual.position = -size / 2
-	visual.color = color
-	body.add_child(visual)
-
 	add_child(body)
 
 
-func _add_platform(pos: Vector2, size: Vector2, color: Color) -> void:
+func _add_platform(pos: Vector2, size: Vector2) -> void:
 	_platform_data.append([pos, size])
-	_add_rect(pos, size, color)
+	_add_collider(pos, size)
+	TileDecorator.decorate_platform(self, pos, size)
+
+
+func _add_pillar(pos: Vector2, size: Vector2) -> void:
+	_platform_data.append([pos, size])
+	_add_collider(pos, size)
+	TileDecorator.decorate_wall(self, pos, size)
 
 
 func _build_kill_zone() -> void:
@@ -128,31 +127,42 @@ func _build_spawn_points() -> void:
 func _build_navigation() -> void:
 	var nav_region := NavigationRegion2D.new()
 	add_child(nav_region)
-
 	var nav_poly := NavigationPolygon.new()
-
 	var margin: float = 40.0
-	var outline := PackedVector2Array([
-		Vector2(margin, margin),
-		Vector2(MAP_W - margin, margin),
-		Vector2(MAP_W - margin, MAP_H - margin),
-		Vector2(margin, MAP_H - margin),
-	])
-	nav_poly.add_outline(outline)
-
+	nav_poly.add_outline(PackedVector2Array([
+		Vector2(margin, margin), Vector2(MAP_W - margin, margin),
+		Vector2(MAP_W - margin, MAP_H - margin), Vector2(margin, MAP_H - margin),
+	]))
 	for plat in _platform_data:
 		var center: Vector2 = plat[0]
 		var size: Vector2 = plat[1]
 		var half: Vector2 = size / 2.0
-		var hole := PackedVector2Array([
-			center + Vector2(-half.x, -half.y),
-			center + Vector2(-half.x, half.y),
-			center + Vector2(half.x, half.y),
-			center + Vector2(half.x, -half.y),
-		])
-		nav_poly.add_outline(hole)
-
+		nav_poly.add_outline(PackedVector2Array([
+			center + Vector2(-half.x, -half.y), center + Vector2(-half.x, half.y),
+			center + Vector2(half.x, half.y), center + Vector2(half.x, -half.y),
+		]))
 	nav_poly.make_polygons_from_outlines()
 	nav_region.navigation_polygon = nav_poly
 
 
+func _build_decorations() -> void:
+	# Plants on the ground (just above floor surface)
+	var floor_y: float = MAP_H - 32
+	TileDecorator.add_decoration(self, Vector2(150, floor_y - 5), TileDecorator.PLANT_1)
+	TileDecorator.add_decoration(self, Vector2(350, floor_y - 5), TileDecorator.MUSHROOM)
+	TileDecorator.add_decoration(self, Vector2(700, floor_y - 5), TileDecorator.PLANT_2)
+	TileDecorator.add_decoration(self, Vector2(950, floor_y - 5), TileDecorator.PLANT_1)
+	TileDecorator.add_decoration(self, Vector2(1300, floor_y - 5), TileDecorator.MUSHROOM)
+	TileDecorator.add_decoration(self, Vector2(1500, floor_y - 5), TileDecorator.PLANT_2)
+
+	# Signs near spawn areas
+	TileDecorator.add_decoration(self, Vector2(200, floor_y - 10), TileDecorator.SIGN)
+	TileDecorator.add_decoration(self, Vector2(1400, floor_y - 10), TileDecorator.SIGN)
+
+	# Crates near pillars
+	TileDecorator.add_decoration(self, Vector2(580, floor_y - 5), TileDecorator.CRATE)
+	TileDecorator.add_decoration(self, Vector2(1020, floor_y - 5), TileDecorator.CRATE)
+
+	# Small rocks on platforms
+	TileDecorator.add_decoration(self, Vector2(270, 600), TileDecorator.ROCK_SMALL)
+	TileDecorator.add_decoration(self, Vector2(1330, 600), TileDecorator.ROCK_SMALL)

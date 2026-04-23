@@ -17,6 +17,9 @@ func _ready() -> void:
 	collision_layer = Constants.LAYER_PICKUPS
 	collision_mask = Constants.LAYER_PLAYERS
 
+	# Replace default visuals with a drawn health pack
+	_setup_visual()
+
 	# Float animation
 	var tween := create_tween().set_loops()
 	tween.tween_property(visual, "position:y", -4.0, 0.8).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
@@ -60,3 +63,29 @@ func _respawn() -> void:
 	visual.visible = true
 	collision.set_deferred("disabled", false)
 	EventBus.pickup_spawned.emit("health", global_position)
+
+
+func _setup_visual() -> void:
+	# Remove default green square and white cross
+	for child in visual.get_children():
+		child.queue_free()
+
+	# Add a proper health pack visual
+	var health_visual := _HealthPackVisual.new()
+	visual.add_child(health_visual)
+
+
+class _HealthPackVisual extends Node2D:
+	func _ready() -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		# White box with red cross — classic health pack
+		# Box
+		draw_rect(Rect2(-10, -8, 20, 16), Color(0.95, 0.95, 0.95))
+		draw_rect(Rect2(-10, -8, 20, 16), Color(0.6, 0.6, 0.6), false, 1.0)
+		# Red cross
+		draw_rect(Rect2(-2, -6, 4, 12), Color(0.9, 0.15, 0.15))
+		draw_rect(Rect2(-6, -2, 12, 4), Color(0.9, 0.15, 0.15))
+		# Shine
+		draw_line(Vector2(-8, -6), Vector2(-6, -6), Color(1, 1, 1, 0.5), 1.0)

@@ -4,14 +4,6 @@ extends Node2D
 const MAP_W: float = 1800.0
 const MAP_H: float = 1100.0
 
-const C_BG := Color(0.08, 0.10, 0.14)
-const C_FLOOR := Color(0.25, 0.28, 0.35)
-const C_WALL := Color(0.22, 0.25, 0.32)
-const C_CEIL := Color(0.20, 0.22, 0.28)
-const C_TOWER := Color(0.30, 0.34, 0.40)
-const C_BRIDGE := Color(0.28, 0.32, 0.38)
-const C_LEDGE := Color(0.33, 0.36, 0.42)
-
 var _platform_data: Array = []
 
 
@@ -22,53 +14,58 @@ func _ready() -> void:
 	_build_kill_zone()
 	_build_spawn_points()
 	_build_navigation()
+	_build_decorations()
 
 
 func _build_background() -> void:
 	var bg := ColorRect.new()
 	bg.size = Vector2(MAP_W, MAP_H)
-	bg.color = C_BG
+	bg.color = Color(0.10, 0.12, 0.20)
 	bg.z_index = -10
 	add_child(bg)
 
 
 func _build_walls() -> void:
-	_add_rect(Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32), C_FLOOR)
-	_add_rect(Vector2(16, MAP_H / 2), Vector2(32, MAP_H), C_WALL)
-	_add_rect(Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H), C_WALL)
-	_add_rect(Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32), C_CEIL)
+	_add_collider(Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32))
+	TileDecorator.decorate_ground(self, Vector2(MAP_W / 2, MAP_H - 16), Vector2(MAP_W, 32), "grass")
+	_add_collider(Vector2(16, MAP_H / 2), Vector2(32, MAP_H))
+	TileDecorator.decorate_wall(self, Vector2(16, MAP_H / 2), Vector2(32, MAP_H))
+	_add_collider(Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H))
+	TileDecorator.decorate_wall(self, Vector2(MAP_W - 16, MAP_H / 2), Vector2(32, MAP_H))
+	_add_collider(Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32))
+	TileDecorator.decorate_ground(self, Vector2(MAP_W / 2, 16), Vector2(MAP_W, 32), "stone")
 
 
 func _build_platforms() -> void:
-	# Left tower (tall pillar with ledges)
-	_add_platform(Vector2(200, MAP_H - 200), Vector2(24, 350), C_TOWER)   # pillar
-	_add_platform(Vector2(200, MAP_H - 380), Vector2(100, 16), C_LEDGE)   # top ledge
-	_add_platform(Vector2(140, MAP_H - 200), Vector2(80, 16), C_LEDGE)    # mid ledge
+	# Left tower
+	_add_pillar(Vector2(200, MAP_H - 200), Vector2(24, 350))
+	_add_platform(Vector2(200, MAP_H - 380), Vector2(100, 16))
+	_add_platform(Vector2(140, MAP_H - 200), Vector2(80, 16))
 
 	# Right tower
-	_add_platform(Vector2(MAP_W - 200, MAP_H - 200), Vector2(24, 350), C_TOWER)
-	_add_platform(Vector2(MAP_W - 200, MAP_H - 380), Vector2(100, 16), C_LEDGE)
-	_add_platform(Vector2(MAP_W - 140, MAP_H - 200), Vector2(80, 16), C_LEDGE)
+	_add_pillar(Vector2(MAP_W - 200, MAP_H - 200), Vector2(24, 350))
+	_add_platform(Vector2(MAP_W - 200, MAP_H - 380), Vector2(100, 16))
+	_add_platform(Vector2(MAP_W - 140, MAP_H - 200), Vector2(80, 16))
 
-	# Center tower (shorter, wider)
-	_add_platform(Vector2(MAP_W / 2, MAP_H - 150), Vector2(32, 250), C_TOWER)
-	_add_platform(Vector2(MAP_W / 2, MAP_H - 280), Vector2(120, 16), C_LEDGE)
+	# Center tower
+	_add_pillar(Vector2(MAP_W / 2, MAP_H - 150), Vector2(32, 250))
+	_add_platform(Vector2(MAP_W / 2, MAP_H - 280), Vector2(120, 16))
 
-	# Bridges connecting towers
-	_add_platform(Vector2(500, MAP_H - 500), Vector2(250, 14), C_BRIDGE)
-	_add_platform(Vector2(MAP_W - 500, MAP_H - 500), Vector2(250, 14), C_BRIDGE)
-	_add_platform(Vector2(MAP_W / 2, MAP_H - 650), Vector2(300, 14), C_BRIDGE)
+	# Bridges
+	_add_platform(Vector2(500, MAP_H - 500), Vector2(250, 14))
+	_add_platform(Vector2(MAP_W - 500, MAP_H - 500), Vector2(250, 14))
+	_add_platform(Vector2(MAP_W / 2, MAP_H - 650), Vector2(300, 14))
 
 	# Ground level cover
-	_add_platform(Vector2(500, MAP_H - 60), Vector2(100, 16), C_LEDGE)
-	_add_platform(Vector2(MAP_W - 500, MAP_H - 60), Vector2(100, 16), C_LEDGE)
+	_add_platform(Vector2(500, MAP_H - 60), Vector2(100, 16))
+	_add_platform(Vector2(MAP_W - 500, MAP_H - 60), Vector2(100, 16))
 
 	# Low floating platforms
-	_add_platform(Vector2(400, MAP_H - 150), Vector2(80, 14), C_LEDGE)
-	_add_platform(Vector2(MAP_W - 400, MAP_H - 150), Vector2(80, 14), C_LEDGE)
+	_add_platform(Vector2(400, MAP_H - 150), Vector2(80, 14))
+	_add_platform(Vector2(MAP_W - 400, MAP_H - 150), Vector2(80, 14))
 
 
-func _add_rect(pos: Vector2, size: Vector2, color: Color) -> void:
+func _add_collider(pos: Vector2, size: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.position = pos
 	body.collision_layer = Constants.LAYER_WORLD
@@ -77,17 +74,19 @@ func _add_rect(pos: Vector2, size: Vector2, color: Color) -> void:
 	rect.size = size
 	shape.shape = rect
 	body.add_child(shape)
-	var visual := ColorRect.new()
-	visual.size = size
-	visual.position = -size / 2
-	visual.color = color
-	body.add_child(visual)
 	add_child(body)
 
 
-func _add_platform(pos: Vector2, size: Vector2, color: Color) -> void:
+func _add_platform(pos: Vector2, size: Vector2) -> void:
 	_platform_data.append([pos, size])
-	_add_rect(pos, size, color)
+	_add_collider(pos, size)
+	TileDecorator.decorate_platform(self, pos, size)
+
+
+func _add_pillar(pos: Vector2, size: Vector2) -> void:
+	_platform_data.append([pos, size])
+	_add_collider(pos, size)
+	TileDecorator.decorate_wall(self, pos, size)
 
 
 func _build_kill_zone() -> void:
@@ -141,3 +140,13 @@ func _build_navigation() -> void:
 		]))
 	nav_poly.make_polygons_from_outlines()
 	nav_region.navigation_polygon = nav_poly
+
+
+func _build_decorations() -> void:
+	var floor_y: float = MAP_H - 32
+	TileDecorator.add_decoration(self, Vector2(300, floor_y - 5), TileDecorator.PLANT_1)
+	TileDecorator.add_decoration(self, Vector2(700, floor_y - 5), TileDecorator.PLANT_2)
+	TileDecorator.add_decoration(self, Vector2(MAP_W - 300, floor_y - 5), TileDecorator.MUSHROOM)
+	TileDecorator.add_decoration(self, Vector2(MAP_W - 700, floor_y - 5), TileDecorator.PLANT_1)
+	TileDecorator.add_decoration(self, Vector2(MAP_W / 2 - 50, floor_y - 5), TileDecorator.SIGN)
+	TileDecorator.add_decoration(self, Vector2(MAP_W / 2 + 50, floor_y - 5), TileDecorator.CRATE)

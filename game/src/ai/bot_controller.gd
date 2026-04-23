@@ -21,6 +21,7 @@ var _patrol_dir: float = 1.0
 var _patrol_timer: float = 0.0
 var _jetpack_timer: float = 0.0
 var _jump_cooldown: float = 0.0
+var _move_speed_mult: float = 0.6  # bots move at 60% of player speed
 
 
 func _ready() -> void:
@@ -72,10 +73,17 @@ func _process(delta: float) -> void:
 	# Always handle navigation obstacles
 	_handle_obstacles()
 
+	# Apply speed multiplier — bots move slower than players
+	input_manager.current_input.move_direction *= _move_speed_mult
+
 
 func _find_target() -> void:
-	var best: CharacterBody2D = null
-	var best_dist: float = difficulty.detection_range
+	# Priority 1: target human players (no BotController child)
+	# Priority 2: target other bots only if no humans found
+	var best_human: CharacterBody2D = null
+	var best_human_dist: float = INF
+	var best_bot: CharacterBody2D = null
+	var best_bot_dist: float = difficulty.detection_range
 
 	for node in get_tree().get_nodes_in_group("players"):
 		if not node is CharacterBody2D:
@@ -85,11 +93,24 @@ func _find_target() -> void:
 			continue
 
 		var dist: float = player.global_position.distance_to(character.global_position)
-		if dist < best_dist:
-			best_dist = dist
-			best = character
+		var is_bot: bool = character.get_node_or_null("BotController") != null
 
-	target = best
+		if not is_bot:
+			# Human player — always prioritize, no range limit
+			if dist < best_human_dist:
+				best_human_dist = dist
+				best_human = character
+		else:
+			# Other bot — fallback target within detection range
+			if dist < best_bot_dist:
+				best_bot_dist = dist
+				best_bot = character
+
+	# Prefer humans over bots
+	if best_human:
+		target = best_human
+	else:
+		target = best_bot
 
 
 func _do_patrol(delta: float) -> void:
@@ -97,17 +118,21 @@ func _do_patrol(delta: float) -> void:
 
 	if _patrol_timer <= 0:
 		_patrol_dir = -_patrol_dir
-		_patrol_timer = randf_range(1.5, 4.0)
+		_patrol_timer = randf_range(1.0, 2.5)
 
-		# Randomly jetpack during patrol
-		if randf() < 0.3:
-			_jetpack_timer = randf_range(0.5, 1.5)
+		# Frequently jetpack during patrol to explore the map
+		_jetpack_timer = randf_range(0.3, 1.2)
 
 	input_manager.current_input.move_direction = _patrol_dir
 
-	# Jetpack up sometimes to explore
-	if _jetpack_timer > 0 and player.jetpack_fuel > 10:
+	# Jetpack up to explore platforms
+	if _jetpack_timer > 0 and player.jetpack_fuel > 5:
 		input_manager.current_input.jetpack_held = true
+
+	# Random jumps while patrolling
+	if player.is_on_floor() and randf() < 0.02:
+		input_manager.current_input.jump_pressed = true
+		input_manager.current_input.jump_held = true
 
 
 func _do_engage(delta: float) -> void:
@@ -138,26 +163,32 @@ func _do_engage(delta: float) -> void:
 			_state_timer = 0.0
 		input_manager.current_input.move_direction = _patrol_dir
 
-	# Jetpack to match target height
-	if to_target.y < -80 and player.jetpack_fuel > 15:
+	# Jetpack aggressively — match target height or gain advantage
+	if to_target.y < -50 and player.jetpack_fuel > 5:
 		input_manager.current_input.jetpack_held = true
-	elif randf() < difficulty.aggression * 0.05:
-		# Random jetpack bursts for unpredictability
+	elif randf() < difficulty.aggression * 0.15:
 		input_manager.current_input.jetpack_held = true
+
+	# Jump while fighting
+	if player.is_on_floor() and randf() < 0.05:
+		input_manager.current_input.jump_pressed = true
+		input_manager.current_input.jump_held = true
 
 	# --- FIRE ---
+	var weapon: WeaponDefinition = weapon_manager.get_current_weapon()
+
+	# Always hold fire when engaging (for automatic weapons)
+	input_manager.current_input.fire_held = true
+
+	# Press fire on cooldown (for semi-auto weapons)
 	if _fire_cooldown <= 0:
 		input_manager.current_input.fire_pressed = true
-		input_manager.current_input.fire_held = true
-		_fire_cooldown = difficulty.reaction_time_sec
-
-	# Keep holding fire for automatic weapons
-	var weapon: WeaponDefinition = weapon_manager.get_current_weapon()
-	if weapon and weapon.automatic and _fire_cooldown < difficulty.reaction_time_sec * 0.5:
-		input_manager.current_input.fire_held = true
+		_fire_cooldown = difficulty.reaction_time_sec * randf_range(0.5, 1.0)
 
 	# Reload when empty
 	if weapon and weapon.ammo_capacity >= 0 and weapon_manager.get_current_ammo() <= 0:
+		input_manager.current_input.fire_held = false
+		input_manager.current_input.fire_pressed = false
 		input_manager.current_input.reload_pressed = true
 
 
@@ -167,9 +198,14 @@ func _do_retreat(_delta: float) -> void:
 		var away: float = -signf(target.global_position.x - player.global_position.x)
 		input_manager.current_input.move_direction = away
 
-		# Jetpack up to escape
-		if player.jetpack_fuel > 20 and randf() < 0.1:
+		# Jetpack away aggressively
+		if player.jetpack_fuel > 5:
 			input_manager.current_input.jetpack_held = true
+
+		# Jump to get away faster
+		if player.is_on_floor():
+			input_manager.current_input.jump_pressed = true
+			input_manager.current_input.jump_held = true
 	else:
 		input_manager.current_input.move_direction = _patrol_dir
 

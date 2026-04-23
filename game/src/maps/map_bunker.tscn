@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://src/ui/hud.tscn" id="13_hud"]
 [ext_resource type="PackedScene" uid="uid://cu2a020aikiyy" path="res://src/ui/scoreboard.tscn" id="14_scoreboard"]
 [ext_resource type="PackedScene" uid="uid://qbxbxc812gjo" path="res://src/ui/match_results.tscn" id="15_results"]
+[ext_resource type="PackedScene" path="res://src/ui/pause_menu.tscn" id="16_pause"]
 
 [node name="MapBunker" type="Node2D"]
 script = ExtResource("1_map")
@@ -99,3 +100,5 @@ script = ExtResource("12_matchmgr")
 [node name="Scoreboard" parent="." instance=ExtResource("14_scoreboard")]
 
 [node name="MatchResults" parent="." instance=ExtResource("15_results")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("16_pause")]

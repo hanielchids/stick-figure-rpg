@@ -33,9 +33,9 @@ const HEALTH_PICKUP_AMOUNT: float = 25.0
 const HEALTH_PICKUP_RESPAWN: float = 20.0
 const WEAPON_PICKUP_RESPAWN: float = 15.0
 
-# Match
-const DEFAULT_SCORE_LIMIT: int = 20
-const DEFAULT_TIME_LIMIT: float = 300.0
+# Match (var instead of const so settings screen can change them)
+var DEFAULT_SCORE_LIMIT: int = 20
+var DEFAULT_TIME_LIMIT: float = 300.0
 
 # Physics layers
 const LAYER_WORLD: int = 1

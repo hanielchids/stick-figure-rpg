@@ -12,15 +12,73 @@ var _respawn_timer: float = 0.0
 @onready var collision: CollisionShape2D = $CollisionShape2D
 
 
+const WEAPON_SPRITES: Dictionary = {
+	"Pistol": "res://assets/sprites/weapons/pistol.png",
+	"Shotgun": "res://assets/sprites/weapons/shotgun.png",
+	"SMG": "res://assets/sprites/weapons/smg.png",
+	"Sniper": "res://assets/sprites/weapons/sniper.png",
+}
+
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	collision_layer = Constants.LAYER_PICKUPS
 	collision_mask = Constants.LAYER_PLAYERS
 
+	# Replace blue rectangle with actual weapon sprite
+	_setup_visual()
+
 	# Float animation
 	var tween := create_tween().set_loops()
 	tween.tween_property(visual, "position:y", -4.0, 0.8).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(visual, "position:y", 4.0, 0.8).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+
+
+func _setup_visual() -> void:
+	if not weapon_resource:
+		return
+
+	# Remove the default blue rectangle
+	var icon: Node = visual.get_node_or_null("Icon")
+	if icon:
+		icon.queue_free()
+
+	# Add weapon sprite
+	var weapon_name: String = weapon_resource.weapon_name
+	if WEAPON_SPRITES.has(weapon_name):
+		var sprite := Sprite2D.new()
+		sprite.texture = load(WEAPON_SPRITES[weapon_name])
+		sprite.scale = Vector2(0.6, 0.6)
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		visual.add_child(sprite)
+	else:
+		# Code-drawn fallback for weapons without sprites (rocket, knife)
+		var drawn := _WeaponPickupVisual.new()
+		drawn.weapon_name = weapon_name
+		visual.add_child(drawn)
+
+	# Update the label with weapon name
+	var label: Node = visual.get_node_or_null("Label")
+	if label and label is Label:
+		label.text = weapon_name
+		label.add_theme_font_size_override("font_size", 10)
+
+
+class _WeaponPickupVisual extends Node2D:
+	var weapon_name: String = ""
+
+	func _ready() -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		match weapon_name:
+			"Rocket Launcher":
+				draw_line(Vector2(-10, 0), Vector2(10, 0), Color(0.4, 0.5, 0.4), 5.0)
+				draw_circle(Vector2(10, 0), 3.0, Color(0.3, 0.3, 0.3))
+				draw_circle(Vector2(-10, 0), 2.0, Color(0.8, 0.3, 0.1))
+			"Knife":
+				draw_line(Vector2(-6, 0), Vector2(6, 0), Color(0.75, 0.78, 0.82), 2.0)
+				draw_line(Vector2(-6, 0), Vector2(-10, 0), Color(0.55, 0.35, 0.2), 3.0)
 
 
 func _process(delta: float) -> void:

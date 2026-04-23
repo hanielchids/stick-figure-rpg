@@ -119,6 +119,21 @@ text = "Fullscreen"
 [node name="Check" type="CheckBox" parent="Panel/VBox/Fullscreen"]
 layout_mode = 2
 
+[node name="Sep3" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="MatchLength" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/MatchLength"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Match Length"
+
+[node name="Option" type="OptionButton" parent="Panel/VBox/MatchLength"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Spacer" type="Control" parent="Panel/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 20)

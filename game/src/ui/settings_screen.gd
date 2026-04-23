@@ -6,7 +6,10 @@ extends Control
 @onready var music_slider: HSlider = $Panel/VBox/MusicVolume/Slider
 @onready var resolution_option: OptionButton = $Panel/VBox/Resolution/Option
 @onready var fullscreen_check: CheckBox = $Panel/VBox/Fullscreen/Check
+@onready var match_length_option: OptionButton = $Panel/VBox/MatchLength/Option
 @onready var back_button: Button = $Panel/VBox/BackButton
+
+var _match_lengths: Array[float] = [60.0, 120.0, 180.0, 300.0, 600.0]
 
 var _resolutions: Array[Vector2i] = [
 	Vector2i(1280, 720),
@@ -32,6 +35,20 @@ func _ready() -> void:
 	var mode: int = DisplayServer.window_get_mode()
 	fullscreen_check.button_pressed = (mode == DisplayServer.WINDOW_MODE_FULLSCREEN)
 
+	# Setup match length
+	match_length_option.add_item("1 min", 0)
+	match_length_option.add_item("2 min", 1)
+	match_length_option.add_item("3 min", 2)
+	match_length_option.add_item("5 min", 3)
+	match_length_option.add_item("10 min", 4)
+	# Find current setting
+	for i in _match_lengths.size():
+		if absf(_match_lengths[i] - Constants.DEFAULT_TIME_LIMIT) < 1.0:
+			match_length_option.selected = i
+			break
+	if match_length_option.selected < 0:
+		match_length_option.selected = 3  # default 5 min
+
 	# Setup volume sliders
 	_setup_audio_buses()
 	master_slider.value = _get_bus_volume("Master")
@@ -44,6 +61,7 @@ func _ready() -> void:
 	music_slider.value_changed.connect(_on_music_changed)
 	resolution_option.item_selected.connect(_on_resolution_changed)
 	fullscreen_check.toggled.connect(_on_fullscreen_toggled)
+	match_length_option.item_selected.connect(_on_match_length_changed)
 	back_button.pressed.connect(_on_back)
 
 
@@ -83,6 +101,11 @@ func _on_sfx_changed(value: float) -> void:
 
 func _on_music_changed(value: float) -> void:
 	_set_bus_volume("Music", value)
+
+
+func _on_match_length_changed(index: int) -> void:
+	if index >= 0 and index < _match_lengths.size():
+		Constants.DEFAULT_TIME_LIMIT = _match_lengths[index]
 
 
 func _on_resolution_changed(index: int) -> void:
