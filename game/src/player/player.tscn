@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://src/combat/melee_resolver.gd" id="11_melee"]
 [ext_resource type="Script" path="res://src/player/sprite_character.gd" id="12_spritechar"]
 [ext_resource type="Script" path="res://src/combat/weapon_visual.gd" id="13_weaponvis"]
+[ext_resource type="Script" path="res://src/player/player_name_label.gd" id="14_namelabel"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_standing"]
 size = Vector2(20, 40)
@@ -84,3 +85,6 @@ script = ExtResource("9_combat")
 
 [node name="WeaponVisual" type="Node2D" parent="."]
 script = ExtResource("13_weaponvis")
+
+[node name="NameLabel" type="Label" parent="."]
+script = ExtResource("14_namelabel")

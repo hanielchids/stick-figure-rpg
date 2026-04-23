@@ -51,3 +51,84 @@ text = "SETTINGS"
 [node name="QuitButton" type="Button" parent="Panel/VBox"]
 layout_mode = 2
 text = "QUIT TO MENU"
+
+[node name="SettingsPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -120.0
+offset_right = 160.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="Sep" type="HSeparator" parent="SettingsPanel/VBox"]
+layout_mode = 2
+
+[node name="MasterVolume" type="HBoxContainer" parent="SettingsPanel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBox/MasterVolume"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "Master"
+
+[node name="Slider" type="HSlider" parent="SettingsPanel/VBox/MasterVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SFXVolume" type="HBoxContainer" parent="SettingsPanel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBox/SFXVolume"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "SFX"
+
+[node name="Slider" type="HSlider" parent="SettingsPanel/VBox/SFXVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicVolume" type="HBoxContainer" parent="SettingsPanel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBox/MusicVolume"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+text = "Music"
+
+[node name="Slider" type="HSlider" parent="SettingsPanel/VBox/MusicVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Spacer" type="Control" parent="SettingsPanel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="BackButton" type="Button" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "BACK"

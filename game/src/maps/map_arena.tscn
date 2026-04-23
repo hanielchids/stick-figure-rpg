@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://src/ui/scoreboard.tscn" id="14_scoreboard"]
 [ext_resource type="PackedScene" path="res://src/ui/match_results.tscn" id="15_results"]
 [ext_resource type="PackedScene" path="res://src/ui/pause_menu.tscn" id="16_pause"]
+[ext_resource type="PackedScene" path="res://src/ui/touch_controls.tscn" id="17_touch"]
 
 [node name="MapArena" type="Node2D" unique_id=197030131]
 script = ExtResource("1_map")
@@ -99,3 +100,5 @@ script = ExtResource("12_matchmgr")
 [node name="MatchResults" parent="." unique_id=1339740948 instance=ExtResource("15_results")]
 
 [node name="PauseMenu" parent="." unique_id=526021919 instance=ExtResource("16_pause")]
+
+[node name="TouchControls" parent="." instance=ExtResource("17_touch")]

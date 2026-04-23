@@ -37,6 +37,10 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
 [input]
 
 move_left={
@@ -106,3 +110,4 @@ scoreboard={
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

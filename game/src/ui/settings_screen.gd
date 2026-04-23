@@ -125,5 +125,10 @@ func _on_fullscreen_toggled(pressed: bool) -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
 
+var _previous_scene: String = "res://src/ui/main_menu.tscn"
+
+func set_return_scene(scene_path: String) -> void:
+	_previous_scene = scene_path
+
 func _on_back() -> void:
-	get_tree().change_scene_to_file("res://src/ui/main_menu.tscn")
+	get_tree().change_scene_to_file(_previous_scene)

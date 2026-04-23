@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://ds7pi4i1lge0o"]
+
+[ext_resource type="Script" path="res://src/ui/touch_controls.gd" id="1_touch"]
+
+[sub_resource type="CircleShape2D" id="circle_fire"]
+radius = 35.0
+
+[sub_resource type="CircleShape2D" id="circle_jump"]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id="circle_jetpack"]
+radius = 28.0
+
+[sub_resource type="RectangleShape2D" id="rect_reload"]
+size = Vector2(50, 30)
+
+[sub_resource type="RectangleShape2D" id="rect_swap"]
+size = Vector2(50, 30)
+
+[node name="TouchControls" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_touch")
+
+[node name="JoystickBG" type="Control" parent="."]
+offset_left = 40.0
+offset_top = 500.0
+offset_right = 160.0
+offset_bottom = 620.0
+
+[node name="BG" type="ColorRect" parent="JoystickBG"]
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 120.0
+color = Color(1, 1, 1, 0.15)
+
+[node name="Knob" type="Control" parent="JoystickBG"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 80.0
+offset_bottom = 80.0
+
+[node name="KnobVisual" type="ColorRect" parent="JoystickBG/Knob"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 1, 1, 0.4)
+
+[node name="FireButton" type="TouchScreenButton" parent="."]
+position = Vector2(1140, 530)
+shape = SubResource("circle_fire")
+action = "fire"
+
+[node name="Label" type="Label" parent="FireButton"]
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
+text = "FIRE"
+horizontal_alignment = 1
+
+[node name="BG" type="ColorRect" parent="FireButton"]
+offset_left = -35.0
+offset_top = -35.0
+offset_right = 35.0
+offset_bottom = 35.0
+color = Color(0.8, 0.2, 0.2, 0.4)
+mouse_filter = 2
+
+[node name="JumpButton" type="TouchScreenButton" parent="."]
+position = Vector2(1060, 620)
+shape = SubResource("circle_jump")
+action = "jump"
+
+[node name="Label" type="Label" parent="JumpButton"]
+offset_left = -18.0
+offset_top = -10.0
+offset_right = 18.0
+offset_bottom = 10.0
+text = "JMP"
+horizontal_alignment = 1
+
+[node name="BG" type="ColorRect" parent="JumpButton"]
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 28.0
+offset_bottom = 28.0
+color = Color(0.2, 0.6, 0.2, 0.4)
+mouse_filter = 2
+
+[node name="JetpackButton" type="TouchScreenButton" parent="."]
+position = Vector2(1220, 620)
+shape = SubResource("circle_jetpack")
+action = "jetpack"
+
+[node name="Label" type="Label" parent="JetpackButton"]
+offset_left = -18.0
+offset_top = -10.0
+offset_right = 18.0
+offset_bottom = 10.0
+text = "JET"
+horizontal_alignment = 1
+
+[node name="BG" type="ColorRect" parent="JetpackButton"]
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 28.0
+offset_bottom = 28.0
+color = Color(0.2, 0.4, 0.8, 0.4)
+mouse_filter = 2
+
+[node name="ReloadButton" type="TouchScreenButton" parent="."]
+position = Vector2(1060, 470)
+shape = SubResource("rect_reload")
+action = "reload"
+
+[node name="Label" type="Label" parent="ReloadButton"]
+offset_left = -25.0
+offset_top = -10.0
+offset_right = 25.0
+offset_bottom = 10.0
+text = "RLD"
+horizontal_alignment = 1
+
+[node name="BG" type="ColorRect" parent="ReloadButton"]
+offset_left = -25.0
+offset_top = -15.0
+offset_right = 25.0
+offset_bottom = 15.0
+color = Color(0.5, 0.5, 0.2, 0.4)
+mouse_filter = 2
+
+[node name="SwapButton" type="TouchScreenButton" parent="."]
+position = Vector2(1220, 470)
+shape = SubResource("rect_swap")
+action = "swap_weapon"
+
+[node name="Label" type="Label" parent="SwapButton"]
+offset_left = -25.0
+offset_top = -10.0
+offset_right = 25.0
+offset_bottom = 10.0
+text = "SWP"
+horizontal_alignment = 1
+
+[node name="BG" type="ColorRect" parent="SwapButton"]
+offset_left = -25.0
+offset_top = -15.0
+offset_right = 25.0
+offset_bottom = 15.0
+color = Color(0.4, 0.3, 0.6, 0.4)
+mouse_filter = 2
