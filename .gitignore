@@ -1,6 +1,6 @@
 # Godot 4 specific
 game/.godot/
-# game/export/
+game/export/
 
 # GDExtension build artifacts
 game/addons/**/bin/
